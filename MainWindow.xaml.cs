@@ -7,6 +7,8 @@ namespace CurrentTimeApp
     public partial class MainWindow : Window
     {
         private DispatcherTimer timer;
+        private DateTime currentTime;
+        private DateTime currentDate;
 
         public MainWindow()
         {
@@ -21,18 +23,11 @@ namespace CurrentTimeApp
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            UpdateCurrentTime();
-            UpdateCurrentDate();
-        }
+            currentTime = DateTime.Now;
+            currentDate = currentTime.Date;
 
-        private void UpdateCurrentTime()
-        {
-            currentTimeText.Text = DateTime.Now.ToString("HH:mm:ss");
-        }
-
-        private void UpdateCurrentDate()
-        {
-            currentDateText.Text = DateTime.Now.ToString("dddd, MMMM d");
+            currentTimeText.Text = currentTime.ToString("HH:mm:ss");
+            currentDateText.Text = currentDate.ToString("dddd, MMMM d");
         }
     }
 }
