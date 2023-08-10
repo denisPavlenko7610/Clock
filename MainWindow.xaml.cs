@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -7,8 +8,8 @@ namespace CurrentTimeApp
     public partial class MainWindow : Window
     {
         private DispatcherTimer timer;
-        private DateTime currentTime;
-        private DateTime currentDate;
+        private StringBuilder currentTimeBuilder = new StringBuilder();
+        private StringBuilder currentDateBuilder = new StringBuilder();
 
         public MainWindow()
         {
@@ -23,11 +24,14 @@ namespace CurrentTimeApp
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            currentTime = DateTime.Now;
-            currentDate = currentTime.Date;
+            currentTimeBuilder.Clear();
+            currentDateBuilder.Clear();
 
-            currentTimeText.Text = currentTime.ToString("HH:mm:ss");
-            currentDateText.Text = currentDate.ToString("dddd, MMMM d");
+            currentTimeBuilder.Append(DateTime.UtcNow.ToString("HH:mm:ss"));
+            currentDateBuilder.Append(DateTime.UtcNow.Date.ToString("dddd, MMMM d"));
+
+            currentTimeText.Text = currentTimeBuilder.ToString();
+            currentDateText.Text = currentDateBuilder.ToString();
         }
     }
 }
