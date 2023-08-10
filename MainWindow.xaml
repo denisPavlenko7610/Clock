@@ -5,12 +5,14 @@
         Background="#333"
         Top="-10"
         Left="1000"
-        WindowStyle="None"
-        >
+        WindowStyle="None">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="5"/>
+    </WindowChrome.WindowChrome>
     <Grid>
         <TextBlock x:Name="currentTimeText" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Margin="0,-20,0,0"
-                   Foreground="White"/>
+                   Foreground="White" Padding="0,10"/>
         <TextBlock x:Name="currentDateText" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Margin="0,56,0,0"
-                   Foreground="White"/>
+                   Foreground="White" Padding="5"/>
     </Grid>
 </Window>
