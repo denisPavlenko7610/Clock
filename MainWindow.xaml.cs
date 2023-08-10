@@ -8,12 +8,15 @@ namespace CurrentTimeApp
     public partial class MainWindow : Window
     {
         private DispatcherTimer timer;
-        private StringBuilder currentTimeBuilder = new StringBuilder();
-        private StringBuilder currentDateBuilder = new StringBuilder();
+        private StringBuilder currentTimeBuilder;
+        private StringBuilder currentDateBuilder;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            currentTimeBuilder = new StringBuilder();
+            currentDateBuilder = new StringBuilder();
 
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
