@@ -10,8 +10,7 @@ namespace CurrentTimeApp
         private DispatcherTimer timer;
         private StringBuilder currentTimeBuilder;
         private StringBuilder currentDateBuilder;
-        private DateTime currentTime;
-        private DateTime currentDate;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -21,22 +20,21 @@ namespace CurrentTimeApp
 
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += Timer_Tick;
+            timer.Tick += OnTick;
 
             timer.Start();
             
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private void OnTick(object sender, EventArgs e)
         {
             currentTimeBuilder.Clear();
             currentDateBuilder.Clear();
 
-            currentTime = DateTime.Now;
-            currentDate = currentTime.Date;
+            var currentTime = DateTime.Now;
 
             currentTimeBuilder.Append(currentTime.ToString("HH:mm:ss"));
-            currentDateBuilder.Append(currentDate.ToString("dddd, MMMM d"));
+            currentDateBuilder.Append(currentTime.ToString("dddd, MMMM d"));
 
             currentTimeText.Text = currentTimeBuilder.ToString();
             currentDateText.Text = currentDateBuilder.ToString();
