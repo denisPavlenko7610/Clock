@@ -1,43 +1,73 @@
 ﻿using System;
-using System.Text;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace CurrentTimeApp
+namespace Time
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        private DispatcherTimer timer;
-        private StringBuilder currentTimeBuilder;
-        private StringBuilder currentDateBuilder;
+        private readonly DispatcherTimer _timer;
+        private DateTime _lastDate = DateTime.MinValue;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            currentTimeBuilder = new StringBuilder();
-            currentDateBuilder = new StringBuilder();
+            _timer = new DispatcherTimer(DispatcherPriority.Background, Dispatcher)
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
+            _timer.Tick += OnTick;
 
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += OnTick;
-
-            timer.Start();
-            
+            Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
         }
 
-        private void OnTick(object sender, EventArgs e)
+        private void OnLoaded(object? sender, RoutedEventArgs e)
         {
-            currentTimeBuilder.Clear();
-            currentDateBuilder.Clear();
+            UpdateNow(DateTime.Now);
+            AlignAndStart();
+        }
 
-            var currentTime = DateTime.Now;
+        private void OnUnloaded(object? sender, RoutedEventArgs e)
+        {
+            _timer.Stop();
+            _timer.Tick -= OnTick;
+            Loaded -= OnLoaded;
+            Unloaded -= OnUnloaded;
+        }
 
-            currentTimeBuilder.Append(currentTime.ToString("HH:mm:ss"));
-            currentDateBuilder.Append(currentTime.ToString("dddd, MMMM d"));
+        private void AlignAndStart()
+        {
+            var now = DateTime.Now;
+            var delay = TimeSpan.FromMilliseconds(1000 - now.Millisecond);
+            _timer.Stop();
+            _timer.Interval = delay;
+            _timer.Start();
+        }
 
-            currentTimeText.Text = currentTimeBuilder.ToString();
-            currentDateText.Text = currentDateBuilder.ToString();
+        private void OnTick(object? sender, EventArgs e)
+        {
+            var now = DateTime.Now;
+
+            if (_timer.Interval != TimeSpan.FromSeconds(1))
+                _timer.Interval = TimeSpan.FromSeconds(1);
+
+            UpdateNow(now);
+        }
+
+        private void UpdateNow(DateTime now)
+        {
+            var culture = CultureInfo.CurrentCulture;
+
+            currentTimeText.Text = now.ToString("HH:mm:ss", culture);
+
+            if (now.Date != _lastDate.Date)
+            {
+                currentDateText.Text = now.ToString("dddd, MMMM d", culture);
+                _lastDate = now.Date;
+            }
         }
     }
 }
